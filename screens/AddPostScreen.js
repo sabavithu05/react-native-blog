@@ -1,15 +1,50 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { COLORS } from "../utils/colors";
+import { useState } from "react";
+import { TextInput } from "react-native-gesture-handler";
+import { apiClient } from "../utils/api";
 
 export default function AddPostScreen() {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.heading}>Add Post</Text>
-      <Text style={styles.body}>Create a new blog post here.</Text>
-    </View>
-  );
-}
+  const [title, setTitle] = useState("")
+  const [content, setcontent] = useState("")
 
+  async function handlesubmit() {
+    try {  
+      const response =await apiClient.post( "/posts", {title,content});
+    console.log ( "post creatd:",response.data);
+setcontent("");
+setTitle("");
+Alert.alert("sucesss", "post created sucessfully");}
+ catch (error) {
+  Alert.alert("error", "failed to submit post");
+ }
+  }
+
+
+return (
+  <View style={styles.container}>
+    <Text>  {title} {content} </Text>
+    <TextInput style={styles.input}
+      placeholder="title"
+      value={title}
+      onChangeText={setTitle} />
+
+    <TextInput style={styles.input}
+      placeholder="content"
+      value={content}
+      onChangeText={setcontent}
+      multiline />
+
+
+    <TouchableOpacity style={styles.button} onPress={handlesubmit}>
+      <Text style={styles.buttontext}> submit </Text>
+    </TouchableOpacity>
+
+  </View>
+   
+);
+
+}
 const styles = StyleSheet.create({
   container: {
     flex: 1,

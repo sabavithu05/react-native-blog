@@ -1,7 +1,30 @@
 import { View, Text, StyleSheet } from "react-native";
 import { COLORS } from "../utils/colors";
+import { useEffect, useState } from "react";
+import { apiClient } from "../utils/api";
 
 export default function HomeScreen() {
+  const [posts,setPosts]= useState([]);
+  const [pagination,setpagination]= useState (
+{
+currentPage:1,
+totalPage:0,
+totalCount:0,
+limit:5,
+
+});
+
+useEffect(async( ) =>              {
+
+
+  const response=await apiClient.get ("/posts");
+  console.log("post fected:", response.data.data.posts);
+  setPosts (response.data.data.posts);
+
+}, []);
+
+
+  
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>Home</Text>

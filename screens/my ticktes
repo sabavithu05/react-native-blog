@@ -1,0 +1,185 @@
+import React from "react";
+import { View, Text, StyleSheet, FlatList } from "react-native";
+import {
+  CalendarDays,
+  MapPin,
+  Ticket,
+  CheckCircle2,
+  Clock,
+} from "lucide-react-native";
+
+const tickets = [
+  {
+    id: "1",
+    event: "React Native Conference",
+    date: "Oct 15, 2023",
+    location: "San Francisco, CA",
+    status: "Confirmed",
+  },
+  {
+    id: "2",
+    event: "Tech Meetup 2023",
+    date: "Nov 02, 2023",
+    location: "Colombo, Sri Lanka",
+    status: "Pending",
+  },
+];
+
+function MyTicketsScreen() {
+  const renderItem = ({ item }) => (
+    <View style={styles.card}>
+      {/* Event Title */}
+      <View style={styles.titleRow}>
+        <Ticket color="#6c47ff" size={20} />
+        <Text style={styles.eventTitle}>{item.event}</Text>
+      </View>
+
+      {/* Date */}
+      <View style={styles.row}>
+        <CalendarDays color="#47a3ff" size={18} />
+        <Text style={styles.text}>{item.date}</Text>
+      </View>
+
+      {/* Location */}
+      <View style={styles.row}>
+        <MapPin color="#ff4d6d" size={18} />
+        <Text style={styles.text}>{item.location}</Text>
+      </View>
+
+      {/* Status */}
+      <View style={styles.statusRow}>
+        {item.status === "Confirmed" ? (
+          <CheckCircle2 color="#16a34a" size={18} />
+        ) : (
+          <Clock color="#f59e0b" size={18} />
+        )}
+
+        <View
+          style={[
+            styles.statusBadge,
+            item.status === "Confirmed"
+              ? styles.confirmed
+              : styles.pending,
+          ]}
+        >
+          <Text style={styles.statusText}>{item.status}</Text>
+        </View>
+      </View>
+    </View>
+  );
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.heading}>My Tickets</Text>
+
+      {tickets.length === 0 ? (
+        <View style={styles.emptyBox}>
+          <Ticket color="#999" size={40} />
+          <Text style={styles.emptyText}>
+            No tickets found
+          </Text>
+        </View>
+      ) : (
+        <FlatList
+          data={tickets}
+          keyExtractor={(item) => item.id}
+          renderItem={renderItem}
+          contentContainerStyle={{ paddingBottom: 20 }}
+        />
+      )}
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#f0f0f7",
+    padding: 16,
+  },
+
+  heading: {
+    fontSize: 24,
+    fontWeight: "800",
+    color: "#1a1a2e",
+    marginBottom: 16,
+    marginTop: 8,
+  },
+
+  card: {
+    backgroundColor: "#fff",
+    padding: 16,
+    borderRadius: 14,
+    marginBottom: 12,
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 3,
+  },
+
+  titleRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    marginBottom: 10,
+  },
+
+  eventTitle: {
+    fontSize: 18,
+    fontWeight: "700",
+    color: "#1a1a2e",
+  },
+
+  row: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    marginBottom: 6,
+  },
+
+  text: {
+    fontSize: 14,
+    color: "#555",
+  },
+
+  statusRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    marginTop: 10,
+  },
+
+  statusBadge: {
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 20,
+  },
+
+  confirmed: {
+    backgroundColor: "#d1fae5",
+  },
+
+  pending: {
+    backgroundColor: "#fef3c7",
+  },
+
+  statusText: {
+    fontSize: 12,
+    fontWeight: "600",
+    color: "#111",
+  },
+
+  emptyBox: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 10,
+  },
+
+  emptyText: {
+    fontSize: 16,
+    color: "#888",
+  },
+});
+
+export default MyTicketsScreen;
